@@ -107,7 +107,8 @@
 
     if (!hintShown) {
       hintShown = true;
-      toast('Click the tiles: 1x yellow, 2x green, 3x gray');
+      toast('Click the tiles: 1X&nbsp<span class="toast-yellow">YELLOW</span>, 2X&nbsp' +
+        '<span class="toast-green">GREEN</span>, 3X&nbsp<span class="toast-gray">GRAY</span>', true);
     }
   }
 
@@ -171,6 +172,8 @@
       renderCursor();
       return;
     }
+
+    if (hintShown) hideToast();
 
     updateKeys(word, states);
     flipRow(word, states);
@@ -322,7 +325,7 @@
     for (let r = 0; r < ROWS; r++) {
       rowWords[r] = { letters: '', states: [GRAY, GRAY, GRAY, GRAY, GRAY] };
       for (let c = 0; c < COLS; c++) {
-        cells[r][c].classList.remove('pop');
+        cells[r][c].classList.remove('flipped');
         cells[r][c].style.animationDelay = '';
         setCell(r, c, '', null);
       }
@@ -332,6 +335,7 @@
     keyStates = {};
     history = [];
     gameOver = false;
+    hintShown = false;
     syncKeys();
     $('recommend').classList.add('hidden');
     $('candidates-panel').classList.add('hidden');
@@ -358,36 +362,8 @@
     resetArmed = false;
     clearTimeout(resetTimer);
     const b = $('btn-reset');
-    b.textContent = 'Reset';
+    b.textContent = 'Reset Game';
     b.classList.remove('danger');
-  }
-
-  function celebrate() {
-    const row = turn;
-    let idx = 0;
-    for (let c = 0; c < COLS; c++) {
-      const cell = cells[row][c];
-      if (!rowWords[row].letters[c]) continue;
-      cell.dataset.state = 'green';
-      cell.style.animationDelay = (idx * 35) + 'ms';
-      cell.classList.add('pop');
-      idx++;
-    }
-    return 600 + idx * 35;
-  }
-
-  function solvedIt() {
-    if (gameOver) { toast('This game is already over'); return; }
-    if (turn === 0) { toast('Enter a guess first'); return; }
-    gameOver = true;
-    const delay = celebrate();
-    setTimeout(() => {
-      openModal(
-        '<div class="modal-title">Solved it!</div>' +
-        '<div class="modal-sub">Great work. The board is cleared for the next game.</div>',
-        { onAction: resetGame }
-      );
-    }, delay);
   }
 
   function win(answer, tries) {
@@ -430,12 +406,19 @@
     modalAction();
   }
 
-  function toast(message) {
+  function toast(message, persistent) {
     const el = $('toast');
-    el.textContent = message;
+    el.innerHTML = message;
     el.classList.add('show');
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => el.classList.remove('show'), 1600);
+    if (!persistent) {
+      toastTimer = setTimeout(() => el.classList.remove('show'), 3000);
+    }
+  }
+
+  function hideToast() {
+    clearTimeout(toastTimer);
+    $('toast').classList.remove('show');
   }
 
   /* ---------------- "Use" a candidate word ---------------- */
@@ -470,7 +453,6 @@
 
     $('btn-undo').addEventListener('click', e => { e.currentTarget.blur(); undo(); });
     $('btn-reset').addEventListener('click', e => { e.currentTarget.blur(); armReset(); });
-    $('btn-solved').addEventListener('click', e => { e.currentTarget.blur(); solvedIt(); });
     $('btn-play-again').addEventListener('click', () => { triggerModalButton(); });
     $('btn-more').addEventListener('click', e => { e.currentTarget.blur(); showMoreCandidates(); });
 
@@ -485,7 +467,6 @@
       const panel = $('candidates-panel');
       const show = panel.classList.contains('hidden');
       panel.classList.toggle('hidden');
-      btn.textContent = show ? 'Hide list' : 'Show list';
       if (show) renderCandidates(core.getCandidates());
     });
   }

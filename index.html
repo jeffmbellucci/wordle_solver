@@ -9,7 +9,7 @@
 <body>
   <header class="header">
     <h1 class="wordmark" aria-label="Wordle Solver">
-      WORD<span class="le">LE</span> <span class="sub">SOLVER</span>
+      WORD<span class="le">LE</span> <span class="sub">HELPER</span>
     </h1>
   </header>
 
@@ -18,7 +18,7 @@
   <main class="app">
     <section id="recommend" class="recommend hidden">
       <span id="candidate-count" class="candidate-count"></span>
-      <button id="toggle-candidates" class="button toggle-button">Show list</button>
+      <button id="toggle-candidates" class="button toggle-button">Toggle word list</button>
     </section>
 
     <section id="board" class="board" aria-label="Wordle grid"></section>
@@ -26,13 +26,12 @@
     <section id="candidates-panel" class="candidates hidden">
       <div class="candidates-hint">Click a word to use it</div>
       <div id="candidate-list" class="candidate-list"></div>
-      <button id="btn-more" class="button more-button hidden">More possible words</button>
+      <button id="btn-more" class="button more-button hidden">More possible words (Most common first)</button>
     </section>
 
     <section class="controls">
       <button id="btn-undo" class="button">Undo</button>
-      <button id="btn-reset" class="button">Reset</button>
-      <button id="btn-solved" class="button">Solved it</button>
+      <button id="btn-reset" class="button">Reset Game</button>
     </section>
 
     <section id="keyboard" class="keyboard" aria-label="On-screen keyboard"></section>

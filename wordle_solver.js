@@ -476,6 +476,10 @@
     buildKeyboard();
     wire();
     renderCursor();
+
+    document.body.classList.add('window-active');
+    window.addEventListener('focus', () => document.body.classList.add('window-active'));
+    window.addEventListener('blur', () => document.body.classList.remove('window-active'));
   }
 
   init();

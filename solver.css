@@ -129,7 +129,7 @@ body {
   border-color: var(--tile-filled-border);
 }
 
-.cell.active {
+body.window-active .cell.active {
   border-color: var(--text);
 }
 

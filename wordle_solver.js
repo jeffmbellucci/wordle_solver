@@ -176,13 +176,14 @@
     flipRow(word, states);
     renderCursor();
 
+    const solvedGuess = word === candidates[0];
     const usedGuesses = turn + 1;
     turn++;
     col = 0;
 
     if (candidates.length === 1) {
       gameOver = true;
-      win(candidates[0], usedGuesses);
+      win(candidates[0], solvedGuess ? usedGuesses : usedGuesses + 1);
     } else if (turn >= ROWS) {
       gameOver = true;
       lose(candidates);
@@ -320,7 +321,11 @@
     core.reset();
     for (let r = 0; r < ROWS; r++) {
       rowWords[r] = { letters: '', states: [GRAY, GRAY, GRAY, GRAY, GRAY] };
-      for (let c = 0; c < COLS; c++) setCell(r, c, '', null);
+      for (let c = 0; c < COLS; c++) {
+        cells[r][c].classList.remove('pop');
+        cells[r][c].style.animationDelay = '';
+        setCell(r, c, '', null);
+      }
     }
     turn = 0;
     col = 0;
@@ -357,15 +362,32 @@
     b.classList.remove('danger');
   }
 
+  function celebrate() {
+    const row = turn;
+    let idx = 0;
+    for (let c = 0; c < COLS; c++) {
+      const cell = cells[row][c];
+      if (!rowWords[row].letters[c]) continue;
+      cell.dataset.state = 'green';
+      cell.style.animationDelay = (idx * 35) + 'ms';
+      cell.classList.add('pop');
+      idx++;
+    }
+    return 600 + idx * 35;
+  }
+
   function solvedIt() {
     if (gameOver) { toast('This game is already over'); return; }
     if (turn === 0) { toast('Enter a guess first'); return; }
     gameOver = true;
-    openModal(
-      '<div class="modal-title">Solved it!</div>' +
-      '<div class="modal-sub">Great work. The board is cleared for the next game.</div>',
-      { onAction: resetGame }
-    );
+    const delay = celebrate();
+    setTimeout(() => {
+      openModal(
+        '<div class="modal-title">Solved it!</div>' +
+        '<div class="modal-sub">Great work. The board is cleared for the next game.</div>',
+        { onAction: resetGame }
+      );
+    }, delay);
   }
 
   function win(answer, tries) {

@@ -390,6 +390,26 @@ body {
 }
 .modal-button:hover { background: #61a557; }
 
+/* ---------- Footer ---------- */
+
+.repo-footnote {
+  color: var(--muted);
+  font-size: 12px;
+  opacity: 0.6;
+  padding: 0 12px 14px;
+}
+
+.repo-footnote a {
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--tile-border);
+}
+
+.repo-footnote a:hover {
+  color: var(--text);
+  border-bottom-color: var(--muted);
+}
+
 /* ---------- Utility ---------- */
 
 .hidden { display: none; }

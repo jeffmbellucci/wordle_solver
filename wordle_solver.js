@@ -7,7 +7,7 @@
   const { GRAY, YELLOW, GREEN } = window.WORDLE_STATES;
   const ROWS = 6;
   const COLS = window.WORDLE_LENGTH;
-  const MAX_SHOWN = 25;
+  const PAGE_SIZE = 24;
   const STATE_COLOR = { [GRAY]: 'gray', [YELLOW]: 'yellow', [GREEN]: 'green' };
 
   const core = new window.WordleSolverCore(window.WORDLE_DATA);
@@ -191,6 +191,9 @@
     }
 
     showRecommend(candidates);
+    if (!$('candidates-panel').classList.contains('hidden')) {
+      renderCandidates(candidates);
+    }
   }
 
   function shake(r) {
@@ -203,26 +206,33 @@
   /* ---------------- Candidates / recommendation ---------------- */
 
   function showRecommend(candidates) {
-    const best = candidates[0];
-    $('best-word').textContent = best ? best.toUpperCase() : '-----';
-    $('candidate-count').textContent = best
-      ? 'Remaining: ' + candidates.length + (candidates.length === 1 ? ' word' : ' words')
-      : '';
+    $('candidate-count').textContent =
+      'Remaining: ' + candidates.length + (candidates.length === 1 ? ' word' : ' words');
     $('recommend').classList.remove('hidden');
   }
 
   function renderCandidates(candidates) {
+    candidateList = candidates.slice();
+    candidatePage = 0;
+    const shown = candidateList.slice(0, PAGE_SIZE);
     const list = $('candidate-list');
-    const shown = candidates.slice(0, MAX_SHOWN);
     list.innerHTML = shown.map(w =>
-      '<span class="candidate-word">' + w.toUpperCase() + '</span>'
+      '<span class="candidate-word" data-word="' + w + '">' + w.toUpperCase() + '</span>'
+    ).join('') ||
+      '<span class="candidate-word">No possible words</span>';
+    const more = $('btn-more');
+    more.classList.toggle('hidden', candidateList.length <= PAGE_SIZE);
+  }
+
+  function showMoreCandidates() {
+    if (candidatePage * PAGE_SIZE >= candidateList.length) return;
+    candidatePage++;
+    const shown = candidateList.slice(0, (candidatePage + 1) * PAGE_SIZE);
+    $('candidate-list').innerHTML = shown.map(w =>
+      '<span class="candidate-word" data-word="' + w + '">' + w.toUpperCase() + '</span>'
     ).join('');
-    if (candidates.length > MAX_SHOWN) {
-      const more = document.createElement('div');
-      more.className = 'candidate-word';
-      more.textContent = '... ' + (candidates.length - MAX_SHOWN) + ' more';
-      list.appendChild(more);
-    }
+    const more = $('btn-more');
+    more.classList.toggle('hidden', shown.length >= candidateList.length);
   }
 
   /* ---------------- Keyboard ---------------- */
@@ -320,6 +330,8 @@
     syncKeys();
     $('recommend').classList.add('hidden');
     $('candidates-panel').classList.add('hidden');
+    $('btn-more').classList.add('hidden');
+    candidatePage = 0;
     renderCursor();
     toast('New game');
   }
@@ -404,17 +416,16 @@
     toastTimer = setTimeout(() => el.classList.remove('show'), 1600);
   }
 
-  /* ---------------- "Use" best guess ---------------- */
+  /* ---------------- "Use" a candidate word ---------------- */
 
-  function useBest() {
+  function useWord(word) {
+    if (!word) return;
     if (gameOver || turn >= ROWS) return;
-    const best = core.bestGuess;
-    if (!best) { toast('No candidates yet'); return; }
     const row = rowWords[turn];
     for (let c = 0; c < COLS; c++) {
-      row.letters = row.letters.slice(0, c) + best[c] + row.letters.slice(c + 1);
+      row.letters = row.letters.slice(0, c) + word[c] + row.letters.slice(c + 1);
       row.states[c] = GRAY;
-      setCell(turn, c, best[c], GRAY);
+      setCell(turn, c, word[c], GRAY);
     }
     col = COLS;
     renderCursor();
@@ -438,8 +449,13 @@
     $('btn-undo').addEventListener('click', e => { e.currentTarget.blur(); undo(); });
     $('btn-reset').addEventListener('click', e => { e.currentTarget.blur(); armReset(); });
     $('btn-solved').addEventListener('click', e => { e.currentTarget.blur(); solvedIt(); });
-    $('use-best').addEventListener('click', e => { e.currentTarget.blur(); useBest(); });
     $('btn-play-again').addEventListener('click', () => { triggerModalButton(); });
+    $('btn-more').addEventListener('click', e => { e.currentTarget.blur(); showMoreCandidates(); });
+
+    $('candidate-list').addEventListener('click', e => {
+      const word = e.target.dataset && e.target.dataset.word;
+      if (word) useWord(word);
+    });
 
     $('toggle-candidates').addEventListener('click', e => {
       const btn = e.currentTarget;

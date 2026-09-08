@@ -17,10 +17,6 @@
 
   <main class="app">
     <section id="recommend" class="recommend hidden">
-      <div class="recommend-word" aria-label="Best guess">
-        <span id="best-word" class="best-word">-----</span>
-      </div>
-      <button id="use-best" class="button render-button">Use</button>
       <span id="candidate-count" class="candidate-count"></span>
       <button id="toggle-candidates" class="button toggle-button">Show list</button>
     </section>
@@ -28,7 +24,9 @@
     <section id="board" class="board" aria-label="Wordle grid"></section>
 
     <section id="candidates-panel" class="candidates hidden">
+      <div class="candidates-hint">Click a word to use it</div>
       <div id="candidate-list" class="candidate-list"></div>
+      <button id="btn-more" class="button more-button hidden">More possible words</button>
     </section>
 
     <section class="controls">

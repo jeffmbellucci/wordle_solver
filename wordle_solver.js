@@ -8,6 +8,7 @@
   const ROWS = 6;
   const COLS = window.WORDLE_LENGTH;
   const PAGE_SIZE = 24;
+const AUTO_OPEN_MAX = 50;
   const STATE_COLOR = { [GRAY]: 'gray', [YELLOW]: 'yellow', [GREEN]: 'green' };
 
   const core = new window.WordleSolverCore(window.WORDLE_DATA);
@@ -195,6 +196,9 @@
     }
 
     showRecommend(candidates);
+    if (candidates.length <= AUTO_OPEN_MAX) {
+      $('candidates-panel').classList.remove('hidden');
+    }
     if (!$('candidates-panel').classList.contains('hidden')) {
       renderCandidates(candidates);
     }

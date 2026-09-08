@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WordLE Solver</title>
+  <link rel="stylesheet" href="solver.css">
+</head>
+<body>
+  <header class="header">
+    <h1 class="wordmark" aria-label="Wordle Solver">
+      WORD<span class="le">LE</span> <span class="sub">SOLVER</span>
+    </h1>
+  </header>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <main class="app">
+    <section id="recommend" class="recommend hidden">
+      <div class="recommend-word" aria-label="Best guess">
+        <span id="best-word" class="best-word">-----</span>
+      </div>
+      <button id="use-best" class="button render-button">Use</button>
+      <span id="candidate-count" class="candidate-count"></span>
+      <button id="toggle-candidates" class="button toggle-button">Show list</button>
+    </section>
+
+    <section id="board" class="board" aria-label="Wordle grid"></section>
+
+    <section id="candidates-panel" class="candidates hidden">
+      <div id="candidate-list" class="candidate-list"></div>
+    </section>
+
+    <section class="controls">
+      <button id="btn-undo" class="button">Undo</button>
+      <button id="btn-reset" class="button">Reset</button>
+      <button id="btn-solved" class="button">Solved it</button>
+    </section>
+
+    <section id="keyboard" class="keyboard" aria-label="On-screen keyboard"></section>
+  </main>
+
+  <div id="modal-overlay" class="modal-overlay hidden">
+    <div class="modal">
+      <div id="modal-content"></div>
+      <button id="btn-play-again" class="button modal-button">New game</button>
+    </div>
+  </div>
+
+  <script src="data.js"></script>
+  <script src="solver.js"></script>
+  <script src="wordle_solver.js"></script>
+</body>
+</html>

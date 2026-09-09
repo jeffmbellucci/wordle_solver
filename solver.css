@@ -188,6 +188,45 @@ body.window-active .cell.active {
 .candidate-word:not([data-word]) { cursor: default; }
 .candidate-word[data-word]:hover { background: var(--gray); }
 .candidate-word[data-word]:active { transform: scale(0.96); }
+.candidate-word.end-s   { color: #e06161; }
+.candidate-word.end-ed  { color: #f5923d; }
+.candidate-word.end-y   { color: #e3c21c; }
+
+.candidate-word[data-tooltip] { position: relative; }
+.candidate-word[data-tooltip]::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #a33;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.15s ease;
+  z-index: 20;
+}
+.candidate-word[data-tooltip]::before {
+  content: '';
+  position: absolute;
+  bottom: calc(100% + 3px);
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: #a33;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+  z-index: 20;
+}
+.candidate-word[data-tooltip]:hover::after,
+.candidate-word[data-tooltip]:hover::before {
+  opacity: 1;
+}
 
 .candidates-hint {
   color: var(--muted);

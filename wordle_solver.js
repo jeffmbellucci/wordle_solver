@@ -219,14 +219,28 @@ const AUTO_OPEN_MAX = 50;
     $('recommend').classList.remove('hidden');
   }
 
+  function endingClass(word) {
+    if (/[abcdefghijklmnopqrstuvwxz]s$/.test(word)) return 'end-s'; // allow as, is, os, ss
+    if (/[bcdfghjklmnpqrstvwxz]y$/.test(word)) return 'end-y'; // allow ey, ay, oy, uy
+    if (/[bcdfghjklmnpqrstvwxz]ed$/.test(word)) return 'end-ed'; // allow aed, eed, ied, oed, ued
+    return '';
+  }
+
+  function candidateChip(word) {
+    const cls = endingClass(word);
+    const tip = cls
+      ? ' data-tooltip="Wordle solutions are less likely to follow this format"'
+      : '';
+    return '<span class="candidate-word' + (cls ? ' ' + cls : '') + '"' + tip +
+      ' data-word="' + word + '">' + word.toUpperCase() + '</span>';
+  }
+
   function renderCandidates(candidates) {
     candidateList = candidates.slice();
     candidatePage = 0;
     const shown = candidateList.slice(0, PAGE_SIZE);
     const list = $('candidate-list');
-    list.innerHTML = shown.map(w =>
-      '<span class="candidate-word" data-word="' + w + '">' + w.toUpperCase() + '</span>'
-    ).join('') ||
+    list.innerHTML = shown.map(candidateChip).join('') ||
       '<span class="candidate-word">No possible words</span>';
     const more = $('btn-more');
     more.classList.toggle('hidden', candidateList.length <= PAGE_SIZE);
@@ -236,9 +250,7 @@ const AUTO_OPEN_MAX = 50;
     if (candidatePage * PAGE_SIZE >= candidateList.length) return;
     candidatePage++;
     const shown = candidateList.slice(0, (candidatePage + 1) * PAGE_SIZE);
-    $('candidate-list').innerHTML = shown.map(w =>
-      '<span class="candidate-word" data-word="' + w + '">' + w.toUpperCase() + '</span>'
-    ).join('');
+    $('candidate-list').innerHTML = shown.map(candidateChip).join('');
     const more = $('btn-more');
     more.classList.toggle('hidden', shown.length >= candidateList.length);
   }

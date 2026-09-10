@@ -22,4 +22,6 @@ I think you will have a similar experience if you give it a bit of time.
 
 Happy Wordle-ing!!
 
-<img width="718" height="806" alt="Screenshot 2026-09-10 at 4 46 25 AM" src="https://github.com/user-attachments/assets/a22b1d06-e2ac-4057-beb0-157d636a9c26" />
+<img width="569" height="808" alt="Screenshot 2026-09-10 at 5 00 46 AM" src="https://github.com/user-attachments/assets/b28cd5a6-63d0-490c-a0fe-f9c23cda2658" />
+<img width="564" height="825" alt="Screenshot 2026-09-10 at 4 53 12 AM" src="https://github.com/user-attachments/assets/fb55a76d-03b1-4685-b81b-6e04f61a0ff1" />
+

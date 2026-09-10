@@ -20,4 +20,6 @@ I am excited for you to try it. Remember it's not cheating because I don't have 
 
 I think you will have a similar experience if you give it a bit of time.  
 
-Happy wordling!!
+Happy Wordle-ing!!
+
+<img width="718" height="806" alt="Screenshot 2026-09-10 at 4 46 25 AM" src="https://github.com/user-attachments/assets/a22b1d06-e2ac-4057-beb0-157d636a9c26" />

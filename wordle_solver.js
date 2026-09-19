@@ -220,7 +220,7 @@ const AUTO_OPEN_MAX = 50;
   }
 
   function endingClass(word) {
-    if (/[bcdefghjklmnpqrstvwxz]s$/.test(word)) return 'end-s'; // allow as, is, os, ss
+    if (/[bcdefghjklmnpqrtvwxz]s$/.test(word)) return 'end-s'; // allow as, is, os, ss
     if (/[bcdfghjklmnpqrstvwxz]y$/.test(word)) return 'end-y'; // allow ey, ay, oy, uy
     if (/[bcdfghjklmnpqrstvwxz]ed$/.test(word)) return 'end-ed'; // allow aed, eed, ied, oed, ued
     return '';
